@@ -6,81 +6,224 @@
 #define MCDONALDS_SRC_ITEMS_H_
 
 #include <array>
+#include <string>
+#include <tuple>
+#include <vector>
 
+using namespace std;
 
 /*
  * Enums are used as an inbetween for the types
  * Instead of having to parse strings each time, we only do each once
  */
 
-// enum for allowed burger types, unknown will become UNKNOWN_BURGER
-enum Burger {
-  Big_Mac,
-  Quarter_Pounder_with_Cheese,
-  BLT_Quarter_Pounder,
-  Bacon_Habanero_Ranch_Quarter_Pounder,
-  Bacon_and_Cheese_Quarter_Pounder,
-  Deluxe_Quarter_Pounder,
-  Double_Quarter_Pounder_with_Cheese,
-  Hamburger,
-  Cheeseburger,
-  Grilled_Onion_Cheddar_Burger,
-  Double_Cheeseburger,
-  McDouble,
-  Daily_Double,
-  McRib,
-  UNKNOWN_BURGER,
+enum Item {
+  UNKNOWN,
+  Burgers,
+  Wraps,
+  ChickenAndFish,
+  Drinks,
+  Checkout,
+};
+vector<tuple<Item, string>> item_strings = {
+    {Burgers, "Burgers"},
+    {Wraps, "Wraps"},
+    {ChickenAndFish, "ChickenAndFish"},
+    {Drinks, "Drinks"},
+    {Checkout, "Checkout"},
+    {UNKNOWN, "UNKNOWN"},
 };
 
-std::array
+// enum for allowed burger types, unknown will become UNKNOWNBURGER
+enum Burger {
+  BigMac = 0,
+  QuarterPounderwithCheese,
+  BLTQuarterPounder,
+  BaconHabaneroRanchQuarterPounder,
+  BaconAndCheeseQuarterPounder,
+  DeluxeQuarterPounder,
+  DoubleQuarterPounderwithCheese,
+  Hamburger,
+  Cheeseburger,
+  GrilledOnionCheddarBurger,
+  DoubleCheeseburger,
+  McDouble,
+  DailyDouble,
+  McRib,
+  UNKNOWNBURGER = -1, // unknown input, offset
+}; // 14 items
 
+const vector<tuple<Burger, string>> burger_strings = {
+    {BigMac, "BigMac"},
+    {QuarterPounderwithCheese, "QuarterPounderWithCheese"},
+    {BLTQuarterPounder, "BLTQuarterPounder"},
+    {BaconHabaneroRanchQuarterPounder, "BaconHabaneroRanchQuarterPounder"},
+    {BaconAndCheeseQuarterPounder, "BaconAndCheeseQuarterPounder"},
+    {DeluxeQuarterPounder, "DeluxeQuarterPounder"},
+    {DoubleQuarterPounderwithCheese, "DoubleQuarterPounderWithCheese"},
+    {Hamburger, "Hamburger"},
+    {Cheeseburger, "Ceeseburger"},
+    {GrilledOnionCheddarBurger, "GrilledOnionCheddarBurger"},
+    {DoubleCheeseburger, "DoubleCheeseburger"},
+    {McDouble, "McDouble"},
+    {DailyDouble, "DailyDouble"},
+    {McRib, "McRib"},
+    {UNKNOWNBURGER, "UNKNOWNBURGER"},
+};
 
 // enum for allowed wraps, unknown will become UNKNOWN_WRAP
 enum Wrap {
-  McWrap_Chicken,
-  McWrap_Sweet_Chili_Chicken,
-  Chipotle_BBQ_Snack_Wrap,
-  Honey_Mustard_Snack_Wrap,
-  Ranch_Snack_Wrap,
-  Mac_Snack_Wrap,
-  UNKNOWN_WRAP,
+  McWrapChicken = 14,
+  McWrapSweetChiliChicken,
+  ChipotleBBQSnackWrap,
+  HoneyMustardSnackWrap,
+  RanchSnackWrap,
+  MacSnackWrap,
+  UNKNOWNWRAP = -1, // unknown, also offset
+}; // 7 items
+
+const vector<tuple<Wrap, string>> wrap_strings = {
+    {McWrapChicken, "McWrapChicken"},
+    {McWrapSweetChiliChicken, "McWrapSweetChiliChicken"},
+    {ChipotleBBQSnackWrap, "ChipotleBBQSnackWrap"},
+    {HoneyMustardSnackWrap, "HoneyMustardSnackWrap"},
+    {RanchSnackWrap, "RanchSnackWrap"},
+    {MacSnackWrap, "MacSnackWrap"},
+    {UNKNOWNWRAP, "UNKNOWNWRAP"},
 };
 
-// enum for allowed Chicken and fish, unknown will become UNKNOWN_C_F
+// enum for allowed Chicken and fish, unknown will become UNKNOWNCF
 enum Chicken_Fish {
-  Chicken_McNuggets,
-  Chicken_Classic_Sandwich,
-  Chicken_Club,
-  Premium_Crispy_Chicken_Ranch_BLT_Sandwich,
+  ChickenMcNuggets = 20,
+  ChickenClassicSandwich,
+  ChickenClub,
+  PremiumCrispyChickenRanchBLTSandwich,
   McChicken,
-  Southern_Style_Chicken,
-  Filet_O_Fish,
-  UNKNOWN_C_F,
+  SouthernStyleChicken,
+  FiletOFish,
+  UNKNOWNCF = -1, // unknown, also offset
+}; // 8 items
+
+vector<tuple<Chicken_Fish, string>> c_f_strings = {
+    {ChickenMcNuggets, "ChickenMcNuggets"},
+    {ChickenClassicSandwich, "ChickenClassicSandwich"},
+    {ChickenClub, "ChickenClub"},
+    {PremiumCrispyChickenRanchBLTSandwich, "PremiumCrispyChickenRanchBLTSandwich"},
+    {McChicken, "McChicken"},
+    {SouthernStyleChicken, "SouthernStyleChicken"},
+    {FiletOFish, "FiletOFish"},
+    {UNKNOWNCF, "UNKNOWNCF"},
 };
 
-// enum for allowed Drinks, unknown will become UNKNOWN_DRINK
-enum Drinks {
-  Coffee,
+// enum for allowed Drinks, unknown will become UNKNOWNDRINK
+enum Drink {
+  Coffee = 27,
   Latte,
   Mocha,
-  Caramel_Mocha,
-  Hot_Chocolate,
-  Iced_Coffee,
-  Iced_Mocha,
-  Iced_Caramel_Mocha,
-  Frappe_Mocha,
-  Frappe_Caramel,
-  Frappe_Chocolate_Chip,
-  Blueberry_Pomegranate_Smoothie,
-  Strawberry_Banana_Smoothie,
-  Mango_Pineapple_Smoothie,
-  Frozen_Strawberry_Lemonade,
-  Cherry_Berry_Chiller,
-  Vanilla_Shake,
-  Chocolate_Shake,
-  Strawberry_Shake,
-  Dulce_de_Leche_Shake,
-  UNKNOWN_DRINK,
+  CaramelMocha,
+  HotChocolate,
+  IcedCoffee,
+  IcedMocha,
+  IcedCaramelMocha,
+  FrappeMocha,
+  FrappeCaramel,
+  FrappeChocolateChip,
+  BlueberryPomegranateSmoothie,
+  StrawberryBananaSmoothie,
+  MangoPineappleSmoothie,
+  FrozenStrawberryLemonade,
+  CherryBerryChiller,
+  VanillaShake,
+  ChocolateShake,
+  StrawberryShake,
+  DulcedeLecheShake,
+  UNKNOWNDRINK = -1,
+}; // 21 items
+
+vector<tuple<Drink, string>> drink_strings = {
+    {Coffee, "Coffee"},
+    {Latte, "Latte"},
+    {Mocha, "Mocha"},
+    {CaramelMocha, "CaramelMocha"},
+    {HotChocolate, "HotChocolate"},
+    {IcedCoffee, "IcedCoffee"},
+    {IcedMocha, "IcedMocha"},
+    {IcedCaramelMocha, "IcedCaramelMocha"},
+    {FrappeMocha, "FrappeMocha"},
+    {FrappeCaramel, "FrappeCaramel"},
+    {FrappeChocolateChip, "FrappeChocolateChip"},
+    {BlueberryPomegranateSmoothie, "BlueberryPomegranateSmoothie"},
+    {StrawberryBananaSmoothie, "StrawberryBananaSmoothie"},
+    {MangoPineappleSmoothie, "MangoPineappleSmoothie"},
+    {FrozenStrawberryLemonade, "FrozenStrawberryLemonade"},
+    {CherryBerryChiller, "CherryBerryChiller"},
+    {VanillaShake, "VanillaShake"},
+    {ChocolateShake, "ChocolateShake"},
+    {StrawberryShake, "StrawberryShake"},
+    {DulcedeLecheShake, "DulcedeLecheShake"},
+    {UNKNOWNDRINK, "UNKNOWNDRINK"},
 };
+
+const float prices[46] = {
+    8.40,
+    3.94,
+    7.83,
+    7.98,
+    9.12,
+    1.98,
+    3.35,
+    7.68,
+    2.78,
+    5.54,
+    4.77,
+    6.29,
+    3.65,
+    5.13,
+    9.52,
+    9.16,
+    6.36,
+    7.17,
+    1.42,
+    6.07,
+    0.16,
+    2.43,
+    1.37,
+    8.04,
+    1.57,
+    4.01,
+    1.30,
+    1.09,
+    9.99,
+    2.18,
+    5.13,
+    8.39,
+    6.13,
+    2.96,
+    6.38,
+    5.24,
+    4.94,
+    9.73,
+    2.93,
+    7.71,
+    5.27,
+    7.70,
+    4.00,
+    8.92,
+    2.83,
+    3.52,
+};
+
+/**
+ * @brief Gets the name of a type that is unknown
+ * @param i the int index of the type, casting to int will do
+ * @return the name as a string
+ */
+string name_from_possible(int i) {
+  if (i >= 0 && i < 14) return get<1>(burger_strings[i]);
+  if (i >= 14 && i < 20) return get<1>(wrap_strings[i]);
+  if (i >= 20 && i < 27) return get<1>(c_f_strings[i]);
+  if (i >= 27 && i < 46) return get<1>(drink_strings[i]);
+  return "UNKNOWN";
+}
 
 #endif //MCDONALDS_SRC_ITEMS_H_

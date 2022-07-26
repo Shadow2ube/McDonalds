@@ -10,7 +10,7 @@
       "name": "linux-debug",
       "displayName": "Default Config",
       "description": "Default build using Ninja",
-      "generator": "Ninja",
+      "generator": "Unix Makefiles",
       "binaryDir": "${sourceDir}/build/linux-debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
@@ -41,5 +41,10 @@
       "name": "windows",
       "configurePreset": "windows-release"
     }
-  ]
+  ],
+  "vendor": {
+    "jetbrains.com/clion": {
+      "generator": "Ninja"
+    }
+  }
 }
