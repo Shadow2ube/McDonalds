@@ -3,4 +3,4 @@ project(McDonalds)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(McDonalds src/main.cpp)
+add_executable(McDonalds src/main.cpp src/items.h)

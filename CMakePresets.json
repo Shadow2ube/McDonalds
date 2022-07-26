@@ -1,0 +1,32 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 22,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "Default Config",
+      "description": "Default build using Ninja",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/linux-default"
+    },
+    {
+      "name": "windows-only",
+      "generator": "MinGW Makefiles",
+      "displayName": "Windows only configuration",
+      "description": "This build only works on windows",
+      "binaryDir": "${sourceDir}/build/windows-only",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    }
+  ]
+}
