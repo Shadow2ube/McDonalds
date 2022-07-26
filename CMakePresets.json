@@ -7,14 +7,17 @@
   },
   "configurePresets": [
     {
-      "name": "default",
+      "name": "linux-debug",
       "displayName": "Default Config",
       "description": "Default build using Ninja",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/linux-default"
+      "binaryDir": "${sourceDir}/build/linux-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
     },
     {
-      "name": "windows-only",
+      "name": "windows-release",
       "generator": "MinGW Makefiles",
       "displayName": "Windows only configuration",
       "description": "This build only works on windows",
@@ -25,8 +28,18 @@
         "rhs": "Windows"
       },
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Release"
       }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "windows",
+      "configurePreset": "windows-release"
     }
   ]
 }
