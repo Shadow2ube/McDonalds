@@ -13,7 +13,10 @@
 
 using namespace std;
 
-int main() {
-  printf("%ld\n", __cplusplus);
+int main(int argc, char **argv) {
+  cout.flush();
+  cout << "yeet" << endl;
+  printf("%ld\n", __func__);
+  cout.flush();
   return 0;
 }
