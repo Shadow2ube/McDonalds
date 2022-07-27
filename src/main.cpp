@@ -176,21 +176,27 @@ tuple<T, bool> find_type(vector<tuple<T, string>> vec) {
  * @param order The list of items
  */
 void get_total(const vector<tuple<int, int>> &order) {
-  double total_due = print_total(order); // print total, it also returns it as a double
+  const double total = print_total(order); // print total, it also returns it as a double
+  double total_due = total;
+  double change;
   do {
-    int tender = util::prompt<int>("Enter amount tendered: "); // get amount entered
-    if (tender > total_due) { // amt paid > total due
-      printf("Change Due: %.2f\n", tender - total_due); // formatting the output
-      return; // exit
-    } else if (tender == total_due) { // amt paid == total due
+    auto tender = util::prompt<double>("Enter amount tendered: "); // get amount entered
+    if (tender == total_due) { // amt paid == total due
       print("Exact change!\n");
-      return; // exit
+      break; // exit
+    } else if (tender > total_due) { // amt paid > total due
+      printf("Change Due: %.2f\n", tender - total_due); // formatting the output
+      change = tender - total_due;
+      break; // exit
     } else {
       total_due -= tender;
       printf("Your short $%.2f\n", total_due); // formatting the output
     }
     cout.flush(); // compatibility with more terminals
   } while (total_due > 0);
+  if (util::prompt<char>("Would you like a receipt (y/n)? ")=='n') return;
+  cout << endl; // spacing
+  print_receipt(order, total, change);
 }
 
 /**

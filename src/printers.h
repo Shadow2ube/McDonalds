@@ -99,6 +99,23 @@ void print_order(vector<tuple<int, int>> order) {
 }
 
 /**
+ * @brief Similar to print_order, where it transposes the order and
+ * @param order the map of int, int where the first is the id, and second is quantity
+ * @param total The total after tax, this doesn't recalculate it
+ */
+void print_receipt(vector<tuple<int, int>> order, double total, double change) {
+  util::menu("Receipt", util::foreach<tuple<int, int>, tuple<int, string, float>>(
+      order,
+      [](tuple<int, int> t) -> tuple<int, string, float> {
+        auto [x, y] = t;
+        return {y, name_from_possible(x), prices[x] * y};
+      }
+  ));
+  printf("Change owed: %.2f\nTotal + 8%%: %.2f\n", change, total);
+  cout.flush(); // compatibility with more terminals
+}
+
+/**
  * @brief Prints the total and also returns it
  * @param order map of ids and quantities
  * @return the total

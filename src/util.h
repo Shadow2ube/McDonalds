@@ -44,6 +44,12 @@ inline void menu(const string &name, const vector<string> &opts) {
   cout << endl;
 }
 
+/**
+ * @brief Prints a menu of quantity -> item
+ * @tparam A The type of the vector
+ * @param name the name of the menu
+ * @param opts The possible options
+ */
 template<typename A>
 inline void menu(const string &name, const vector<A> &opts) {
   printf("%s:\n  0: exit", name.c_str());
@@ -55,6 +61,23 @@ inline void menu(const string &name, const vector<A> &opts) {
   cout << endl;
 }
 
+template<typename A, typename B, typename C>
+inline void menu(const string &name, const vector<tuple<A, B, C>> &opts) {
+  printf("%s:", name.c_str());
+  for (auto &[x, y, z]: opts) {
+    printf("\n  %i : %.2f\t %s", x, z, y.c_str());
+  }
+  cout << endl;
+}
+
+/**
+ * @brief Does something to each element of a vector
+ * @tparam I The input vector type
+ * @tparam O The output vector type
+ * @param in The vector input
+ * @param func The function to be applied to each element
+ * @return in, but with the function applied
+ */
 template<typename I, typename O>
 inline vector<O> foreach(vector<I> in, O(*func)(I t)) {
   vector<O> out;
