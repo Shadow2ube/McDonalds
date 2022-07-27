@@ -180,25 +180,35 @@ tuple<T, int> find_type(vector<tuple<T, string>> vec) {
 void get_total(const vector<tuple<int, int>> &order) {
   const double total = print_total(order); // print total, it also returns it as a double
   double total_due = total;
-  double change;
-  do {
-    auto tender = util::prompt<double>("Enter amount tendered: "); // get amount entered
-    if (tender == total_due) { // amt paid == total due
-      print("Exact change!\n");
-      break; // exit
-    } else if (tender > total_due) { // amt paid > total due
-      printf("Change Due: %.2f\n", tender - total_due); // formatting the output
-      change = tender - total_due;
-      break; // exit
-    } else {
-      total_due -= tender;
-      printf("Your short $%.2f\n", total_due); // formatting the output
-    }
-    cout.flush(); // compatibility with more terminals
-  } while (total_due > 0);
-  if (util::prompt<char>("Would you like a receipt (y/n)? ")=='n') return;
+  double change = 0.00;
+  if (util::prompt<char>("Are you paying with a card (y/n)? ") == 'y') {/* do card stuff (there is none) */}
+  else {// skipped if paying with a card
+    do {
+
+      auto tender = util::prompt<double>("Enter amount tendered: "); // get amount entered
+      if (tender == total_due) { // amt paid == total due
+        print("Exact change!\n");
+        break; // exit
+      } else if (tender > total_due) { // amt paid > total due
+        printf("Change Due: %.2f\n", tender - total_due); // formatting the output
+        change = tender - total_due;
+        break; // exit
+      } else {
+        total_due -= tender;
+        printf("Your short $%.2f\n", total_due); // formatting the output
+      }
+      cout.flush(); // compatibility with more terminals
+    } while (total_due > 0);
+  }
+
+  // ask for receipt
+  if (util::prompt<char>("Would you like a receipt (y/n)? ") == 'n') return;
   cout << endl; // spacing
   print_receipt(order, total, change);
+  cout << endl; // spacing
+
+  // wait until user types 'y' and <enter>
+  while (util::prompt<char>("Finish (y/n)?") != 'y') wait(100ms);
 }
 
 /**

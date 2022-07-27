@@ -24,6 +24,7 @@ using namespace std;
 #define wait(x) std::this_thread::sleep_for(constants::skip_timers ? 0ms : (x))
 #define print(x) cout << (x) << endl
 
+// used to split up things into categories
 namespace constants {
 // the welcome screen as a constant string, because it doesn't change
 const string welcome_screen = R"(******************************************************
