@@ -18,7 +18,7 @@
 using namespace std;
 
 template<typename T>
-tuple<T, bool> find_type(vector<tuple<T, string>> vec);
+tuple<T, int> find_type(vector<tuple<T, string>> vec);
 void get_total(const vector<tuple<int, int>> &order);
 
 void parse_args(int argc, char **argv, const vector<tuple<string, bool &>> &args);
@@ -30,23 +30,24 @@ int main(int argc, char **argv) {
       {"-r", constants::dont_clear},
   });
 
-  vector<tuple<int, int>> order; // initialize the order
 
   // wait for start
   print(constants::welcome_screen);
   print_start();
+  start: // a goto flag to get to if the program is looping
   clear_screen
   print(constants::welcome_screen);
   print("Press enter to start...");
   cin.get();
 
-  do {
+  vector<tuple<int, int>> order; // initialize the order
+  do { // menu logic loop
     clear_screen
     print_categories(!order.empty()); // print the categories, add "Checkout" if the cart isn't empty
     auto [p, err] = find_type(item_strings); // ask user for input and get type of order
-    if (err) continue; // if there's an error (invalid input), skip everything and repeat
+    if (err < 0) continue; // if there's an error (invalid input), skip everything and repeat
+    if (err == 1) break;
     clear_screen
-
 
     /*
      * Burgers, Wraps, ChickenAndFish, and Drinks are all the same logically except that
@@ -120,7 +121,7 @@ int main(int argc, char **argv) {
         int o = util::prompt<int>("Is there anything you want to change (0 to continue)? ");
         if (o == 0) { // no items to change, finish up
           get_total(order); // print total, and get payment
-          return 0;
+          goto start; // go back to beginning, for next customer
         } else {
           // get item to remove
           int r = util::prompt<int>("How much do you want (0 to remove)? ");
@@ -155,19 +156,20 @@ int main(int argc, char **argv) {
  * @return T, bool - tuple of both
  */
 template<typename T>
-tuple<T, bool> find_type(vector<tuple<T, string>> vec) {
+tuple<T, int> find_type(vector<tuple<T, string>> vec) {
   auto opt = util::prompt<string>("Enter an option: "); // get input
   T p = (T) -1; // set a default type (in our case, UNKNOWN<type>)
+  if (opt == "EXIT") return {p, 1};
   if (!util::is_num(opt)) { // check if the string is a number
     p = util::find_from(vec, opt); // find the key from the value
     auto &[x, _] = vec[vec.size() - 1]; // get the last item from the map, should be UNKNOWN<type>
     if (p == x) { // check if they are equal
       print("Invalid option (Watch for case sensitivity)!"); // print an error
-      return {p, true}; // return the end, and that there is an error
+      return {p, -1}; // return the end, and that there is an error
     }
   } else p = std::get<0>(vec[stoi(opt) - 1]); // else get the option through index
 
-  return {p, false}; // return p and no error
+  return {p, 0}; // return p and no error
 }
 
 /**
