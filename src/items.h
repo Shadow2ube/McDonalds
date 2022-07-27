@@ -17,6 +17,7 @@ using namespace std;
  * Instead of having to parse strings each time, we only do each once
  */
 
+// possible categories for the items
 enum Item {
   Burgers = 0,
   Wraps = 1,
@@ -25,6 +26,7 @@ enum Item {
   Checkout = 4,
   UNKNOWN = -1,
 };
+// a map to map out what strings mean what enum type, allows for string to enum conversion
 vector<tuple<Item, string>> item_strings = {
     {Burgers, "Burgers"},
     {Wraps, "Wraps"},
@@ -54,6 +56,7 @@ enum Burger {
   UNKNOWNBURGER = -1,
 }; // 14 items
 
+// burger LUT to string, allows for easier conversion between the two
 const vector<tuple<Burger, string>> burger_strings = {
     {BigMac, "BigMac"},
     {QuarterPounderwithCheese, "QuarterPounderWithCheese"},
@@ -84,6 +87,7 @@ enum Wrap {
   UNKNOWNWRAP = -1,
 }; // 7 items
 
+// allows for conversion to and from strings
 const vector<tuple<Wrap, string>> wrap_strings = {
     {McWrapChicken, "McWrapChicken"},
     {McWrapSweetChiliChicken, "McWrapSweetChiliChicken"},
@@ -107,7 +111,8 @@ enum Chicken_Fish {
   UNKNOWNCF = -1,
 }; // 8 items
 
-vector<tuple<Chicken_Fish, string>> c_f_strings = {
+// allows for conversion to and from strings
+vector<tuple<Chicken_Fish, string>> cf_strings = {
     {ChickenMcNuggets, "ChickenMcNuggets"},
     {ChickenClassicSandwich, "ChickenClassicSandwich"},
     {ChickenClub, "ChickenClub"},
@@ -144,6 +149,7 @@ enum Drink {
   UNKNOWNDRINK = -1,
 }; // 21 items
 
+// allows for conversion to and from strings
 vector<tuple<Drink, string>> drink_strings = {
     {Coffee, "Coffee"},
     {Latte, "Latte"},
@@ -220,14 +226,14 @@ const float prices[47] = {
 };
 
 /**
- * @brief Gets the name of a type that is unknown
+ * @brief Gets the name (string) of a type that is unknown at the time
  * @param i the int index of the type, casting to int will do
  * @return the name as a string
  */
 string name_from_possible(int i) {
   if (i >= 0 && i < 14) return get<1>(burger_strings[i - burger_offset]);
   if (i >= 14 && i < 20) return get<1>(wrap_strings[i - wrap_offset]);
-  if (i >= 20 && i < 27) return get<1>(c_f_strings[i - cf_offset]);
+  if (i >= 20 && i < 27) return get<1>(cf_strings[i - cf_offset]);
   if (i >= 27 && i <= 46) return get<1>(drink_strings[i - drink_offset]);
   return "UNKNOWN";
 }

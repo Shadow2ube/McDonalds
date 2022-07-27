@@ -20,10 +20,12 @@
 
 using namespace std;
 
+// some macros for making life slightly easier
 #define wait(x) std::this_thread::sleep_for(constants::skip_timers ? 0ms : (x))
 #define print(x) cout << (x) << endl
 
 namespace constants {
+// the welcome screen as a constant string, because it doesn't change
 const string welcome_screen = R"(******************************************************
 *  __  __      _____                    _     _      *
 * |  \/  |    |  __ \                  | |   | |     *
@@ -33,6 +35,7 @@ const string welcome_screen = R"(***********************************************
 * |_|  |_|\___|_____/ \___/|_| |_|\__,_|_|\__,_|___/ *
 ******************************************************)";
 
+// some global variables for debugging
 bool skip_timers = false;
 bool dont_clear = true;
 

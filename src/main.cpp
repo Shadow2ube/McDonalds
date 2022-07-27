@@ -1,3 +1,13 @@
+/**
+ * By: Christian LaForest
+ * Date: July 25-27, 2022
+ * Notes:
+ *  - The program has a lot more options than required, it was because I read the
+ *      part that says I need 5-6 items after I had already sort-of implemented the
+ *      whole system, so there are 47-ish under 4 categories
+ *  - Follow the README.md to build and run this application
+ */
+
 #include <iostream>
 #include <tuple>
 #include <variant>
@@ -11,30 +21,16 @@ template<typename T>
 tuple<T, bool> find_type(vector<tuple<T, string>> vec);
 void get_total(const vector<tuple<int, int>> &order);
 
-/**
- * @brief Parses the arguments out of argv, and places them into a predefined array
- * @param argc int - size of argv
- * @param argv char ** - array of char *(strings)
- * @param args list of pairs of string and bool &, the value will be placed in the bool &
- */
-void parse_args(int argc, char **argv, vector<tuple<string, bool &>> args) {
-  // make everything false
-  for (auto &[_, y]: args) y = false;
-
-  // check if the argument is in the list, if it is, make true
-  for (int i = 0; i < argc; ++i)
-    for (auto &[x, y]: args) if (argv[i] == x) y = true;
-}
+void parse_args(int argc, char **argv, const vector<tuple<string, bool &>> &args);
 
 int main(int argc, char **argv) {
-  bool invalid_credit;
+  // parse commandline arguments and put them into the variables specified
   parse_args(argc, argv, {
-      {"-c", invalid_credit},
       {"-s", constants::skip_timers},
       {"-r", constants::dont_clear},
   });
 
-  vector<tuple<int, int>> order;
+  vector<tuple<int, int>> order; // initialize the order
 
   // wait for start
   print(constants::welcome_screen);
@@ -46,32 +42,38 @@ int main(int argc, char **argv) {
 
   do {
     clear_screen
-    print_categories(!order.empty());
-    auto [p, err] = find_type(item_strings);
-    if (err)continue;
+    print_categories(!order.empty()); // print the categories, add "Checkout" if the cart isn't empty
+    auto [p, err] = find_type(item_strings); // ask user for input and get type of order
+    if (err) continue; // if there's an error (invalid input), skip everything and repeat
     clear_screen
 
 
-    // both will be set in switch statement
+    /*
+     * Burgers, Wraps, ChickenAndFish, and Drinks are all the same logically except that
+     *    they do the process for their specific list
+     */
     switch (p) {
-      case UNKNOWN:if (util::prompt<string>("Are you sure you want to exit (y/n): ") == "y") return 0;
+      case UNKNOWN: // ask user if they want to exit
+        if (util::prompt<string>("Are you sure you want to exit (y/n): ") == "y") return 0;
         break;
       case Burgers: {
-        print_burgers();
-        auto [o, e] = find_type(burger_strings);
-        if (e) continue;
-        int amt = util::prompt<int>("How many? ");
-        if (amt < 0) {
+        print_burgers(); // print the list of burgers
+        auto [o, e] = find_type(burger_strings); // get user input and the enum type
+        if (e) continue; // if there's an error, continue
+        if (o == -1) continue; // if it's an invalid burger, continue
+        int amt = util::prompt<int>("How many? "); // ask how many
+        if (amt < 0) { // if < 0, print its invalid, and continue
           cout << "That's invalid" << endl;
           continue;
-        } else if (amt == 0) continue;
-        order.emplace_back(o, amt);
+        } else if (amt == 0) continue; // if equal to 0, continue without printing anything
+        order.emplace_back(o, amt); // add the item type and quantity to the order
         break;
       }
-      case Wraps: {
+      case Wraps: { // same thing as burger, but with wraps
         print_wraps();
         auto [o, e] = find_type(wrap_strings);
         if (e) continue;
+        if (o == -1) continue; // if it's an invalid burger, continue
         int amt = util::prompt<int>("How many? ");
         if (amt < 0) {
           cout << "That's invalid" << endl;
@@ -80,10 +82,11 @@ int main(int argc, char **argv) {
         order.emplace_back(o, amt);
         break;
       }
-      case ChickenAndFish: {
+      case ChickenAndFish: { // same things as burger, but with chicken and fish
         print_cf();
-        auto [o, e] = find_type(c_f_strings);
+        auto [o, e] = find_type(cf_strings);
         if (e) continue;
+        if (o == -1) continue; // if it's an invalid burger, continue
         int amt = util::prompt<int>("How many? ");
         if (amt < 0) {
           cout << "That's invalid" << endl;
@@ -92,10 +95,11 @@ int main(int argc, char **argv) {
         order.emplace_back(o, amt);
         break;
       }
-      case Drinks: {
+      case Drinks: { // same thing as burger, but with drinks
         print_drinks();
         auto [o, e] = find_type(drink_strings);
         if (e) continue;
+        if (o == -1) continue; // if it's an invalid burger, continue
         int amt = util::prompt<int>("How many? ");
         if (amt < 0) {
           cout << "That's invalid" << endl;
@@ -107,24 +111,28 @@ int main(int argc, char **argv) {
       case Checkout: {
         checkout: // goto flag, lets us go back without a loop
         clear_screen
-        print_order(order);
+        print_order(order); // print order
+
+        // confirm checkout
         if (util::prompt<string>("Do you want to checkout (y/n)? ") != "y") continue;
 
+        // get item to change
         int o = util::prompt<int>("Is there anything you want to change (0 to continue)? ");
-        if (o == 0) {
-          get_total(order);
+        if (o == 0) { // no items to change, finish up
+          get_total(order); // print total, and get payment
           return 0;
         } else {
+          // get item to remove
           int r = util::prompt<int>("How much do you want (0 to remove)? ");
           o -= 1; // 1 for the user is 0 for us, so we need to move it over
-          auto &t = order[o];
-          auto &[x, y] = t;
+          auto &t = order[o]; // get the tuple out of the order
+          auto &[x, y] = t; // get the values out of the tuple (t)
 
-          if (r == 0) {
+          if (r == 0) { // if r == 0, remove the item from the list
             std::remove(order.begin(), order.end(), t);
             goto checkout; // goes back to top of case
-          } else {
-            order[o] = {x, r};
+          } else { // else modify item
+            order[o] = {x, r}; // overwrite order[o] with the new value
             goto checkout; // goes back to top of case
           }
         }
@@ -132,7 +140,7 @@ int main(int argc, char **argv) {
       }
       default: { // catch everything else
         print("Invalid option");
-        wait(1000ms);
+        wait(100ms);
         break;
       }
     }
@@ -157,22 +165,45 @@ tuple<T, bool> find_type(vector<tuple<T, string>> vec) {
       print("Invalid option (Watch for case sensitivity)!"); // print an error
       return {p, true}; // return the end, and that there is an error
     }
-  } else p = std::get<0>(vec[stoi(opt) - 1]);
+  } else p = std::get<0>(vec[stoi(opt) - 1]); // else get the option through index
 
   return {p, false}; // return p and no error
 }
 
+/**
+ * @brief Prints the total,
+ * Then gets user to input cash until the amount paid >= amount owed
+ * @param order The list of items
+ */
 void get_total(const vector<tuple<int, int>> &order) {
-  double total_due = print_total(order);
+  double total_due = print_total(order); // print total, it also returns it as a double
   do {
-    int tender = util::prompt<int>("Enter amount tendered: ");
-    if (tender > total_due) {
+    int tender = util::prompt<int>("Enter amount tendered: "); // get amount entered
+    if (tender > total_due) { // amt paid > total due
       printf("Change Due: %.2f\n", tender - total_due); // formatting the output
-      return;
+      return; // exit
+    } else if (tender == total_due) { // amt paid == total due
+      print("Exact change!\n");
+      return; // exit
     } else {
       total_due -= tender;
       printf("Your short $%.2f\n", total_due); // formatting the output
     }
-    cout.flush(); // compatibility
+    cout.flush(); // compatibility with more terminals
   } while (total_due > 0);
+}
+
+/**
+ * @brief Parses the arguments out of argv, and places them into a predefined array
+ * @param argc int - size of argv
+ * @param argv char ** - array of char *(strings)
+ * @param args list of pairs of string and bool &, the value will be placed in the bool &
+ */
+void parse_args(int argc, char **argv, const vector<tuple<string, bool &>> &args) {
+  // make everything false
+  for (auto &[_, y]: args) y = false;
+
+  // check if the argument is in the list, if it is, make true
+  for (int i = 0; i < argc; ++i)
+    for (auto &[x, y]: args) if (argv[i] == x) y = true;
 }

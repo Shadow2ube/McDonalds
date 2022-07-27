@@ -20,6 +20,10 @@ void print_start() {
   cout << "Done!" << endl;
 }
 
+/**
+ * @brief Prints the possible categories for the user
+ * @param checkout whether or not to add the checkout flag
+ */
 void print_categories(bool checkout = false) {
   if (!checkout)
     util::menu("Categories", {
@@ -38,22 +42,46 @@ void print_categories(bool checkout = false) {
     });
 }
 
+/**
+ * @brief Prints a menu for the burgers
+ * takes the burger_strings, removes the keys, making it a vector of strings (remove the keys)
+ *      then removes the last item, because it's an UNKNOWN, that shouldn't be accessible to users
+ */
 void print_burgers() {
   util::menu("Burgers", util::remove_last(util::strip(burger_strings)));
 }
 
+/**
+ * @brief Prints a menu for the wraps
+ * takes the wrap_strings, removes the keys, making it a vector of strings (remove the keys)
+ *      then removes the last item, because it's an UNKNOWN, that shouldn't be accessible to users
+ */
 void print_wraps() {
   util::menu("Wraps: ", util::remove_last(util::strip(wrap_strings)));
 }
 
+/**
+ * @brief Prints a menu for the chicken and fish
+ * takes the cf_strings, removes the keys, making it a vector of strings (remove the keys)
+ *      then removes the last item, because it's an UNKNOWN, that shouldn't be accessible to users
+ */
 void print_cf() {
-  util::menu("Chicken & Fish", util::remove_last(util::strip(c_f_strings)));
+  util::menu("Chicken & Fish", util::remove_last(util::strip(cf_strings)));
 }
 
+/**
+ * @brief Prints a menu for the drinks
+ * takes the drink_strings, removes the keys, making it a vector of strings (remove the keys)
+ *      then removes the last item, because it's an UNKNOWN, that shouldn't be accessible to users
+ */
 void print_drinks() {
   util::menu("Drinks", util::remove_last(util::strip(drink_strings)));
 }
 
+/**
+ * @brief Prints the order from the order string
+ * @param order the map of id number and quantities
+ */
 void print_order(vector<tuple<int, int>> order) {
   // make a menu of the cart. Since the stored items are as their ids,
   //  we need to get their names from the map. The foreach essentially makes
@@ -70,6 +98,11 @@ void print_order(vector<tuple<int, int>> order) {
       }));
 }
 
+/**
+ * @brief Prints the total and also returns it
+ * @param order map of ids and quantities
+ * @return the total
+ */
 double print_total(const vector<tuple<int, int>> &order) {
   double total = 0.00;
   for (auto &[idx, quantity]: order) {
