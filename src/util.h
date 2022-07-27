@@ -61,6 +61,14 @@ inline void menu(const string &name, const vector<A> &opts) {
   cout << endl;
 }
 
+/**
+ * @brief Makes a menu from a name and a tuple with 3 parts
+ * @tparam A the tuple's first type
+ * @tparam B the tuple's second type
+ * @tparam C the tuple's third type
+ * @param name the name of the menu
+ * @param opts the options of the menu
+ */
 template<typename A, typename B, typename C>
 inline void menu(const string &name, const vector<tuple<A, B, C>> &opts) {
   printf("%s:", name.c_str());
@@ -167,7 +175,11 @@ string x_of_size(const string &x, size_t size) {
   return out;
 }
 
-void boxed(string in) {
+/**
+ * @brief Prints a string with stars surrounding it
+ * @param in
+ */
+void boxed(const string &in) {
   cout << x_of_size("*", in.size() + 4) << "\n* " << in << " *\n"
        << x_of_size("*", in.size() + 4) << "\n"
        << endl;
