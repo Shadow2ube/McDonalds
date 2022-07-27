@@ -11,7 +11,7 @@
 // I use linux, most people don't
 // If the clearing of the screen doesn't work, I can't test the other OS's
 #ifdef __unix
-#define clear_screen system("clear");
+#define clear_screen system(constants::dont_clear ? "" : "clear");
 #elif __APPLE__
 #define clear_screen system("clear");
 #else
@@ -34,6 +34,7 @@ const string welcome_screen = R"(***********************************************
 ******************************************************)";
 
 bool skip_timers = false;
+bool dont_clear = true;
 
 }
 

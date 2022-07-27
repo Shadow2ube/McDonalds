@@ -70,18 +70,15 @@ void print_order(vector<tuple<int, int>> order) {
       }));
 }
 
-void print_total(const vector<tuple<int, int>> &order) {
+double print_total(const vector<tuple<int, int>> &order) {
   double total = 0.00;
   for (auto &[idx, quantity]: order) {
     total += prices[idx] * quantity;
   }
   char total_str[26]; // the size of "$0.00" with \0 at the end
-  sprintf(total_str, "The grand total is: $%.2f", total);
-  cout << "a" << endl;
+  sprintf(total_str, "The grand total is: $%.2f", total * 1.8);
   util::boxed(string(total_str));
-  cout << "b" << endl;
-  wait(100ms);
-  cout << "b" << endl;
+  return total * 1.8;
 }
 
 #endif //MCDONALDS_SRC_PRINTERS_H_

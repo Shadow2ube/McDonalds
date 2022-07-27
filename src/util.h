@@ -49,7 +49,7 @@ inline void menu(const string &name, const vector<A> &opts) {
   printf("%s:\n  0: exit", name.c_str());
   int i = 0;
   for (auto &[x, y]: opts) {
-    printf("\n  %i: %i %s", i + 1, y, x.c_str());
+    printf("\n  %i: %i -> %s", i + 1, y, x.c_str());
     ++i;
   }
   cout << endl;
